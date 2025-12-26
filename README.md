@@ -1,6 +1,6 @@
 # DashDNS (Kubernetes)
 
-<img src="img/logo.png"></img>
+<img with="135" height="135" src="img/logo.png"></img>
 
 Multi-tenant Kubernetes clusters get messy fast. DNS traffic gets even messier faster.
 This project provides a policy-driven DNS sidecar injection system for Kubernetes: a controller + mutating admission webhook injects a DNS proxy sidecar into selected pods so you can enforce allow/block rules, apply per-tenant policies, and gain visibility into DNS usage without reworking every app.
