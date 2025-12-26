@@ -45,27 +45,15 @@ High-level flow:
 4. The controller reconciles policy objects and serves policy config (or pushes config), depending on your approach
 5. Sidecar enforces rules and emits metrics/logs
 
-```
-+-------------------+      Admission      +------------------------+
-|  kubectl apply    |  ---------------->  | Mutating Webhook       |
-|  / Deployment     |                     | - matches pod labels   |
-+-------------------+                     | - inject sidecar       |
-                                          +-----------+------------+
-                                                      |
-                                                      v
-                                          +------------------------+
-                                          | Pod w/ DNS Sidecar     |
-                                          | - intercept DNS        |
-                                          | - allow/block          |
-                                          | - metrics/logs         |
-                                          +-----------+------------+
-                                                      |
-                                                      v
-                                          +------------------------+
-                                          | Controller             |
-                                          | - CRD reconciliation   |
-                                          | - policy API/config    |
-                                          +------------------------+
+```mermaid
+flowchart LR
+    A[kubectl apply<br/>Deployment]
+        -->|Admission| 
+    B[Mutating Webhook<br/>- matches pod labels<br/>- inject sidecar]
+
+    B --> C[Pod w/ DNS Sidecar<br/>- intercept DNS<br/>- allow/block<br/>- metrics/logs]
+
+    C --> D[Controller<br/>- CRD reconciliation<br/>- policy API/config]
 ```
 
 ## Repositories in This Organization
