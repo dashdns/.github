@@ -46,14 +46,17 @@ High-level flow:
 5. Sidecar enforces rules and emits metrics/logs
 
 ```mermaid
+
 flowchart LR
     A[kubectl apply<br/>Deployment]
-        -->|Admission| 
     B[Mutating Webhook<br/>- matches pod labels<br/>- inject sidecar]
+    C[Pod w/ DNS Sidecar<br/>- intercept DNS<br/>- allow/block<br/>- metrics/logs]
+    D[Controller<br/>- CRD reconciliation<br/>- policy API/config]
 
-    B --> C[Pod w/ DNS Sidecar<br/>- intercept DNS<br/>- allow/block<br/>- metrics/logs]
+    A -->|Admission| B
+    B --> C
+    C --> D
 
-    C --> D[Controller<br/>- CRD reconciliation<br/>- policy API/config]
 ```
 
 ## Repositories in This Organization
