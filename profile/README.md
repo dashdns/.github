@@ -79,6 +79,10 @@ Replace the placeholders below with actual repo names:
 
 Example DNSPolicy object (shape may differ in your implementation):
 
+The policy supports label and identity based policy identification on itself.
+
+:warning: The controller always ignores the `targetSelector` definitions if the `serviceAccount` already in spec of the policy.
+
 ```yaml
 apiVersion: dns.dnspolicies.io/v1alpha1
 kind: DnsPolicy
@@ -86,6 +90,9 @@ metadata:
   name: tenant-a-restrict-dns
   namespace: tenant-a
 spec:
+  dryrun: true #false optional
+  subject:
+    serviceAccount: operation-team ## optional
   targetSelector:
     app: frontend
     env: production
