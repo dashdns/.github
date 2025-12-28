@@ -1,7 +1,7 @@
 # DashDNS (Kubernetes)
 
 <p align="center">
-<img with="135" height="135" src="img/logo.png"></img>
+<img with="195" height="195" src="img/logo.png"></img>
 </p>
 
 Multi-tenant Kubernetes clusters get messy fast. DNS traffic gets even messier faster.
