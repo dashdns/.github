@@ -165,8 +165,8 @@ Typical metrics you'll want (exported by sidecar and/or controller):
 - [ ] Helm chart + example values
 - [ ] Policy conflict resolution / precedence rules
 - [ ] Per-tenant rate limiting (optional)
-- [ ] Dry-run / audit-only mode
-- [ ] Grafana dashboard JSON
+- [*] Dry-run / audit-only mode
+- [*] Grafana dashboard JSON
 - [ ] E2E tests (kind + cert-manager + webhook)
 - [ ] Docs site (mkdocs/material) or GitHub Pages
 
@@ -184,6 +184,4 @@ Guidelines:
 
 Choose something OSS-friendly:
 
-- **Apache-2.0** if you want "enterprise friendly"
-- **MIT** if you want maximum permissiveness
-
+- **Apache-2.0**
