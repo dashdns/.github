@@ -165,8 +165,8 @@ Typical metrics you'll want (exported by sidecar and/or controller):
 - [ ] Helm chart + example values
 - [ ] Policy conflict resolution / precedence rules
 - [ ] Per-tenant rate limiting (optional)
-- [*] Dry-run / audit-only mode
-- [*] Grafana dashboard JSON
+- [x] Dry-run / audit-only mode
+- [x] Grafana dashboard JSON
 - [ ] E2E tests (kind + cert-manager + webhook)
 - [ ] Docs site (mkdocs/material) or GitHub Pages
 
