@@ -182,6 +182,4 @@ Guidelines:
 
 ## License
 
-Choose something OSS-friendly:
-
 - **Apache-2.0**
