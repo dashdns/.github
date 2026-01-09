@@ -30,6 +30,11 @@ So we inject policy at the pod level.
 - DNS query logs (who/what/when, depending on how you emit)
 - Prometheus metrics (queries allowed/blocked, latency, upstream failures, cache hit ratio, etc.)
 
+**DNS over HTTPS (DoH) support:**
+- Enable encrypted DNS communication with `doh: true` in policy
+- Enhanced privacy and security for DNS queries
+- Compatible with CoreDNS TLS configuration
+
 **No app changes:** Apps keep using cluster DNS as usual; sidecar intercepts at the pod network level.
 
 **GitOps compatible:** CRDs + controller reconcile loop, easy to manage via YAML.
@@ -91,6 +96,7 @@ metadata:
   namespace: tenant-a
 spec:
   dryrun: true #false optional
+  doh: true # Enable DNS over HTTPS (optional)
   subject:
     serviceAccount: operation-team ## optional
   targetSelector:
@@ -104,6 +110,80 @@ spec:
     - "*.malicious-site.com"
     - "tracking.ads.net"
 ```
+
+## DNS over HTTPS (DoH) Configuration
+
+DashDNS supports DNS over HTTPS for enhanced privacy and security. When enabled, DNS queries are encrypted using TLS.
+
+### Enabling DoH in Policy
+
+Simply set `doh: true` in your DNSPolicy spec:
+
+```yaml
+spec:
+  doh: true
+  targetSelector:
+    app: frontend
+  allowList:
+    - "*.example.com"
+```
+
+### CoreDNS TLS Configuration
+
+To support DoH, CoreDNS must be configured with TLS certificates. Here's an example configuration:
+
+**1. Create a TLS secret with your certificates:**
+
+```bash
+kubectl create secret generic coredns-tls-bundle \
+  --from-file=tls.crt=path/to/cert.pem \
+  --from-file=tls.key=path/to/key.pem \
+  -n kube-system
+```
+
+**2. Mount the TLS certificates in CoreDNS deployment:**
+
+```yaml
+volumeMounts:
+  - name: doh-tls
+    mountPath: /certs
+    readOnly: true
+
+volumes:
+  - name: doh-tls
+    secret:
+      secretName: coredns-tls-bundle
+```
+
+**3. Update CoreDNS Corefile to enable TLS:**
+
+```corefile
+.:53 {
+    errors
+    health
+    ready
+    kubernetes cluster.local in-addr.arpa ip6.arpa {
+        pods insecure
+        fallthrough in-addr.arpa ip6.arpa
+    }
+    prometheus :9153
+    forward . /etc/resolv.conf
+    cache 30
+    loop
+    reload
+    loadbalance
+}
+
+# DNS over HTTPS endpoint
+.:443 {
+    tls /certs/tls.crt /certs/tls.key
+    forward . /etc/resolv.conf
+    errors
+    cache 30
+}
+```
+
+When a pod has a policy with `doh: true`, the DNS sidecar will automatically use HTTPS to communicate with CoreDNS on port 443.
 
 ## Installation (Concept)
 
